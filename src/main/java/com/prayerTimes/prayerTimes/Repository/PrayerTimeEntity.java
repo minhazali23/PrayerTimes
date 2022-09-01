@@ -9,11 +9,9 @@ public class PrayerTimeEntity {
 
     private String city;
     private String date;
-    private String PrayerTimes;
+    private String prayerTimes;
 
-    public PrayerTimeEntity(){
-
-    }
+    public PrayerTimeEntity(){}
 
     @DynamoDBHashKey(attributeName = "City")
     public String getCity() {
@@ -27,8 +25,9 @@ public class PrayerTimeEntity {
 
     @DynamoDBAttribute(attributeName = "PrayerTimes")
     public String getPrayerTimes() {
-        return PrayerTimes;
+        return prayerTimes;
     }
+
 
     public void setCity(String city) {
         this.city = city;
@@ -37,6 +36,14 @@ public class PrayerTimeEntity {
         this.date = date;
     }
     public void setPrayerTimes(String prayerTimes) {
-        PrayerTimes = prayerTimes;
+        this.prayerTimes = prayerTimes;
+    }
+    @Override
+    public String toString(){
+        return "PrayerTimeEntity{" +
+                "City=" + city +
+                "Date=" + date +
+                "PrayerTimes=" + prayerTimes +
+                "}";
     }
 }

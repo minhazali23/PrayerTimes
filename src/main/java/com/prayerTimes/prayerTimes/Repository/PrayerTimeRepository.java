@@ -5,9 +5,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBSaveExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ExpectedAttributeValue;
-import org.socialsignin.spring.data.dynamodb.repository.EnableScan;
+import com.prayerTimes.prayerTimes.DTO.PrayerTimeEntityDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,9 +17,15 @@ public class PrayerTimeRepository {
     @Autowired
     private DynamoDBMapper dynamoDBMapper;
 
-    public PrayerTimeEntity save(PrayerTimeEntity prayerTime){
-        dynamoDBMapper.save(prayerTime);
-        return prayerTime;
+    public PrayerTimeEntity save(PrayerTimeEntityDTO prayerTime){
+
+        PrayerTimeEntity insertPrayerTime = new PrayerTimeEntity();
+        insertPrayerTime.setCity(prayerTime.getCity());
+        insertPrayerTime.setDate(prayerTime.getDate());
+        insertPrayerTime.setPrayerTimes(prayerTime.getPrayerTimes());
+
+        dynamoDBMapper.save(insertPrayerTime);
+        return insertPrayerTime;
     }
 
     public PrayerTimeEntity findByCity(String city){
@@ -31,14 +36,20 @@ public class PrayerTimeRepository {
         return dynamoDBMapper.scan(PrayerTimeEntity.class, new DynamoDBScanExpression());
     }
 
-    public PrayerTimeEntity update(String city, PrayerTimeEntity prayerTime){
-        dynamoDBMapper.save(prayerTime,
+    public PrayerTimeEntity update(String city, PrayerTimeEntityDTO prayerTime){
+
+        PrayerTimeEntity updateCityEntity = new PrayerTimeEntity();
+        updateCityEntity.setCity(prayerTime.getCity());
+        updateCityEntity.setDate(prayerTime.getDate());
+        updateCityEntity.setPrayerTimes(prayerTime.getPrayerTimes());
+
+        dynamoDBMapper.save(updateCityEntity,
                 new DynamoDBSaveExpression()
                         .withExpectedEntry(city, new ExpectedAttributeValue(
                                 new AttributeValue().withS(city)
                         )));
 
-        return prayerTime;
+        return updateCityEntity;
     }
 
     public String delete(String id){
