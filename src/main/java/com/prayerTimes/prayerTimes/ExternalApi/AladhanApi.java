@@ -2,44 +2,89 @@ package com.prayerTimes.prayerTimes.ExternalApi;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prayerTimes.prayerTimes.ExternalApi.Pojo.AladhanMainPojo;
 import com.prayerTimes.prayerTimes.ExternalApi.Pojo.Timings;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
 import org.springframework.web.context.annotation.ApplicationScope;
 
-import java.io.File;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @ApplicationScope
 public class AladhanApi {
 
-    // Call API to get JSON obj
     String city;
     String date;
     List<String> timings;
 
-    public List<String> extractDataAndReformat() throws IOException {
+    public AladhanApi(String cityRequest, String countryRequest) throws IOException {
+        this.callApiAndFormatJson(cityRequest,countryRequest);
+    }
+
+    public void callApiAndFormatJson(String city, String country) throws IOException {
+
+        String getJsonFromRequest = consumeExternalApiAndGetJson(city, country);
+        extractDataAndReformat(getJsonFromRequest);
+    }
+
+    public String consumeExternalApiAndGetJson(String city, String country){
+
+        String returnJson = null;
+        String uri = "https://api.aladhan.com/v1/calendarByCity?city=".concat(city).concat("&country=").concat(country).concat("&method=2");
+
+        try {
+            DefaultHttpClient httpClient = new DefaultHttpClient();
+            HttpGet getRequest = new HttpGet(uri);
+            getRequest.addHeader("accept", "application/json");
+
+            HttpResponse response = httpClient.execute(getRequest);
+
+            if(response.getStatusLine().getStatusCode() != 200){
+                throw new RuntimeException("Failed with error code: " + response.getStatusLine().getStatusCode());
+            }
+
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader((response.getEntity().getContent()))
+            );
+
+            returnJson = bufferedReader.lines().collect(Collectors.joining());
+
+        } catch (ClientProtocolException e){
+            e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return returnJson;
+    }
+
+
+    public void extractDataAndReformat(String jsonFromApi) throws IOException {
 
         ObjectMapper mapper = new ObjectMapper();
-        File file = new File("C:\\Users\\minha\\Desktop\\Projects\\prayerTimesData.json");
-        AladhanMainPojo jsonReader = mapper.readValue(file, AladhanMainPojo.class);
+        AladhanMainPojo jsonReader = mapper.readValue(jsonFromApi, AladhanMainPojo.class);
 
-        this.timings = getTimings(jsonReader);
-        this.city = getCity(jsonReader);
-        this.date = getDate(jsonReader);
+        this.timings = getTimingsFromJson(jsonReader);
+        this.city = getCityFromJson(jsonReader);
+        this.date = getDateFromJson(jsonReader);
 
-        return timings;
     }
-    private String getCity(AladhanMainPojo retCity){
+    private String getCityFromJson(AladhanMainPojo retCity){
         return retCity.getData().get(0).getMeta().getTimezone();
     }
 
-    private String getDate(AladhanMainPojo retDate){
+    private String getDateFromJson(AladhanMainPojo retDate){
         return retDate.getData().get(0).getDate().getGregorian().getDate();
     }
 
-    private List<String> getTimings(AladhanMainPojo retTimingsByDay){
+    private List<String> getTimingsFromJson(AladhanMainPojo retTimingsByDay){
 
         JSONObject day = new JSONObject();
 
@@ -63,4 +108,15 @@ public class AladhanApi {
         return getTimingsForMonth;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public List<String> getTimings() {
+        return timings;
+    }
 }

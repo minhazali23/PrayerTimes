@@ -1,14 +1,21 @@
 package com.prayerTimes.prayerTimes.Service;
 
-import com.prayerTimes.prayerTimes.Repository.PrayerTimeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.prayerTimes.prayerTimes.ExternalApi.AladhanApi;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.util.List;
 
 @Service
 public class PrayerTimeService {
 
-    @Autowired
-    PrayerTimeRepository prayerTimeRepository;
+    public List<String> testPojo() throws IOException {
+
+        AladhanApi aladhanApi1 = new AladhanApi("London", "UnitedKingdom");
+//        aladhanApi1.extractDataAndReformat();
+        return aladhanApi1.getTimings();
+
+    }
 
     //Add api class here to call
 

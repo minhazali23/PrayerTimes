@@ -4,9 +4,11 @@ import com.prayerTimes.prayerTimes.DTO.PrayerTimeEntityDTO;
 import com.prayerTimes.prayerTimes.ExternalApi.AladhanApi;
 import com.prayerTimes.prayerTimes.Repository.PrayerTimeEntity;
 import com.prayerTimes.prayerTimes.Repository.PrayerTimeRepository;
+import com.prayerTimes.prayerTimes.Service.PrayerTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -15,6 +17,9 @@ public class PrayerTimesRestController{
 
     @Autowired
     PrayerTimeRepository prayerTimeRepository;
+
+    @Autowired
+    PrayerTimeService prayerTimeService;
 
     @PostMapping("/addNew")
     public PrayerTimeEntity save(@RequestBody PrayerTimeEntityDTO prayerTime){
@@ -46,5 +51,8 @@ public class PrayerTimesRestController{
         return "testString";
     }
 
-
+    @GetMapping(value = "/testPojo")
+    public List<String> testPojo() throws IOException {
+        return prayerTimeService.testPojo();
+    }
 }
