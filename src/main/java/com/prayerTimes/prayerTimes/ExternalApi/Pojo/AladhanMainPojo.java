@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "data"
 })
 @Generated("jsonschema2pojo")
-public class Example {
+public class AladhanMainPojo {
 
     @JsonProperty("code")
     private Integer code;
