@@ -20,7 +20,7 @@ public class PrayerTimeRepository {
     public PrayerTimeEntity save(PrayerTimeEntityDTO prayerTime){
 
         PrayerTimeEntity insertPrayerTime = new PrayerTimeEntity();
-        insertPrayerTime.setCity(prayerTime.getCity());
+        insertPrayerTime.setTimezone(prayerTime.getTimezone());
         insertPrayerTime.setDate(prayerTime.getDate());
         insertPrayerTime.setPrayerTimes(prayerTime.getPrayerTimes());
 
@@ -39,7 +39,7 @@ public class PrayerTimeRepository {
     public PrayerTimeEntity update(String city, PrayerTimeEntityDTO prayerTime){
 
         PrayerTimeEntity updateCityEntity = new PrayerTimeEntity();
-        updateCityEntity.setCity(prayerTime.getCity());
+        updateCityEntity.setTimezone(prayerTime.getTimezone());
         updateCityEntity.setDate(prayerTime.getDate());
         updateCityEntity.setPrayerTimes(prayerTime.getPrayerTimes());
 

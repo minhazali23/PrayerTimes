@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @ApplicationScope
 public class AladhanApi {
 
-    String city;
+    String timezone;
     String date;
     List<String> timings;
 
@@ -72,12 +72,12 @@ public class AladhanApi {
         AladhanMainPojo jsonReader = mapper.readValue(jsonFromApi, AladhanMainPojo.class);
 
         this.timings = getTimingsFromJson(jsonReader);
-        this.city = getCityFromJson(jsonReader);
+        this.timezone = getTimeZoneFromJson(jsonReader);
         this.date = getDateFromJson(jsonReader);
 
     }
-    private String getCityFromJson(AladhanMainPojo retCity){
-        return retCity.getData().get(0).getMeta().getTimezone();
+    private String getTimeZoneFromJson(AladhanMainPojo retTimeZone){
+        return retTimeZone.getData().get(0).getMeta().getTimezone();
     }
 
     private String getDateFromJson(AladhanMainPojo retDate){
@@ -112,8 +112,8 @@ public class AladhanApi {
         return date;
     }
 
-    public String getCity() {
-        return city;
+    public String getTimezone() {
+        return timezone;
     }
 
     public List<String> getTimings() {
