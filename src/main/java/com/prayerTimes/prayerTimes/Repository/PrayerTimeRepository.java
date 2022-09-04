@@ -56,4 +56,16 @@ public class PrayerTimeRepository {
         dynamoDBMapper.delete(id);
         return "PrayerTimeEntity deleted for city " + id;
     }
+
+    public PrayerTimeEntityDTO findOne(String timezone){
+
+        PrayerTimeEntityDTO retDTO = new PrayerTimeEntityDTO();
+        PrayerTimeEntity entity = dynamoDBMapper.load(PrayerTimeEntity.class, timezone);
+
+        retDTO.setTimezone(entity.getTimezone());
+        retDTO.setDate(entity.getDate());
+        retDTO.setPrayerTimes(entity.getPrayerTimes());
+
+        return retDTO;
+    }
 }
