@@ -7,13 +7,17 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 @DynamoDBTable(tableName = "PrayerTimesByCity")
 public class PrayerTimeEntity {
 
+    private String cityCountry;
     private String timezone;
     private String date;
     private String prayerTimes;
 
     public PrayerTimeEntity(){}
 
-    @DynamoDBHashKey(attributeName = "timezone")
+    @DynamoDBHashKey(attributeName = "CityCountry")
+    public String getCityCountry(){return cityCountry;}
+
+    @DynamoDBAttribute(attributeName = "timezone")
     public String getTimezone() {
         return timezone;
     }
@@ -28,6 +32,7 @@ public class PrayerTimeEntity {
         return prayerTimes;
     }
 
+    public void setCityCountry(String cityCountry) {this.cityCountry = cityCountry;}
 
     public void setTimezone(String timezone) {
         this.timezone = timezone;

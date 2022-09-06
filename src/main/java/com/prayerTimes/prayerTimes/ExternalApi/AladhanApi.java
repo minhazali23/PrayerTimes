@@ -7,7 +7,9 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.ApplicationScope;
+import org.springframework.web.context.annotation.RequestScope;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,7 +19,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-@ApplicationScope
+@RequestScope
+@Component
 public class AladhanApi {
 
     String timezone;

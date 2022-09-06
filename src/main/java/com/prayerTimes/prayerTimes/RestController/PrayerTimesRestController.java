@@ -26,33 +26,27 @@ public class PrayerTimesRestController{
         return prayerTimeRepository.save(prayerTime);
     }
 
-    @GetMapping("/get/{city}")
-    public PrayerTimeEntity findByCity(@PathVariable(value = "city") String city){
-        return prayerTimeRepository.findByCity(city);
-    }
-
-    @GetMapping("/get/all")
-    public List<PrayerTimeEntity> listAll(){
-        return prayerTimeRepository.findAll();
+    @GetMapping("/get/{cityCountry}")
+    public PrayerTimeEntity cityCountry(@PathVariable(value = "cityCountry") String cityCountry){
+        return prayerTimeRepository.findByCityCountry(cityCountry);
     }
 
     @PutMapping("/update/{city}")
-    public PrayerTimeEntity update(@PathVariable(value = "city") String city, @RequestBody PrayerTimeEntityDTO prayerTime){
-        return prayerTimeRepository.update(city, prayerTime);
+    public PrayerTimeEntity update(@PathVariable(value = "cityCountry") String cityCountry, @RequestBody PrayerTimeEntityDTO prayerTime){
+        return prayerTimeRepository.update(cityCountry, prayerTime);
     }
 
-    @DeleteMapping("/delete/{city}")
-    public String delete(@PathVariable(value = "city") String city){
-        return prayerTimeRepository.delete(city);
-    }
-
-    @GetMapping(value = "/testMap")
-    public String testcall(){
-        return "testString";
+    @DeleteMapping("/delete/{cityCountry}")
+    public String delete(@PathVariable(value = "cityCountry") String cityCountry){
+        return prayerTimeRepository.delete(cityCountry);
     }
 
     @GetMapping(value = "/testPojo")
     public List<String> testPojo() throws IOException {
         return prayerTimeService.testPojo();
+    }
+    @GetMapping("prayerTimeRequest/{country}/{city}")
+    public PrayerTimeEntityDTO prayerTimeRequest(@PathVariable(value = "city") String city, @PathVariable(value = "country") String country) throws IOException {
+        return prayerTimeService.prayerTimesProcessor(city, country);
     }
 }

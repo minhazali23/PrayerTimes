@@ -9,6 +9,7 @@ import com.prayerTimes.prayerTimes.DTO.PrayerTimeEntityDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Repository
@@ -20,33 +21,35 @@ public class PrayerTimeRepository {
     public PrayerTimeEntity save(PrayerTimeEntityDTO prayerTime){
 
         PrayerTimeEntity insertPrayerTime = new PrayerTimeEntity();
+        insertPrayerTime.setCityCountry(prayerTime.getCityCountry());
         insertPrayerTime.setTimezone(prayerTime.getTimezone());
         insertPrayerTime.setDate(prayerTime.getDate());
-        insertPrayerTime.setPrayerTimes(prayerTime.getPrayerTimes());
+        insertPrayerTime.setPrayerTimes(prayerTime.getPrayerTimes().toString());
 
         dynamoDBMapper.save(insertPrayerTime);
         return insertPrayerTime;
     }
 
-    public PrayerTimeEntity findByCity(String city){
-        return dynamoDBMapper.load(PrayerTimeEntity.class, city);
+    public PrayerTimeEntity findByCityCountry(String cityCountry){
+        return dynamoDBMapper.load(PrayerTimeEntity.class, cityCountry);
     }
 
     public List<PrayerTimeEntity> findAll(){
         return dynamoDBMapper.scan(PrayerTimeEntity.class, new DynamoDBScanExpression());
     }
 
-    public PrayerTimeEntity update(String city, PrayerTimeEntityDTO prayerTime){
+    public PrayerTimeEntity update(String timezone, PrayerTimeEntityDTO prayerTime){
 
         PrayerTimeEntity updateCityEntity = new PrayerTimeEntity();
+        updateCityEntity.setCityCountry(prayerTime.getCityCountry());
         updateCityEntity.setTimezone(prayerTime.getTimezone());
         updateCityEntity.setDate(prayerTime.getDate());
-        updateCityEntity.setPrayerTimes(prayerTime.getPrayerTimes());
+        updateCityEntity.setPrayerTimes(prayerTime.getPrayerTimes().toString());
 
         dynamoDBMapper.save(updateCityEntity,
                 new DynamoDBSaveExpression()
-                        .withExpectedEntry(city, new ExpectedAttributeValue(
-                                new AttributeValue().withS(city)
+                        .withExpectedEntry(timezone, new ExpectedAttributeValue(
+                                new AttributeValue().withS(timezone)
                         )));
 
         return updateCityEntity;
@@ -57,15 +60,22 @@ public class PrayerTimeRepository {
         return "PrayerTimeEntity deleted for city " + id;
     }
 
-    public PrayerTimeEntityDTO findOne(String timezone){
-
+    public PrayerTimeEntityDTO findOne(String cityCountry) {
         PrayerTimeEntityDTO retDTO = new PrayerTimeEntityDTO();
-        PrayerTimeEntity entity = dynamoDBMapper.load(PrayerTimeEntity.class, timezone);
 
-        retDTO.setTimezone(entity.getTimezone());
-        retDTO.setDate(entity.getDate());
-        retDTO.setPrayerTimes(entity.getPrayerTimes());
+        try {
+            PrayerTimeEntity entity = dynamoDBMapper.load(PrayerTimeEntity.class, cityCountry);
 
+            retDTO.setCityCountry(entity.getCityCountry());
+            retDTO.setTimezone(entity.getTimezone());
+            retDTO.setDate(entity.getDate());
+            retDTO.setPrayerTimes(entity.getPrayerTimes());
+
+            return retDTO;
+
+        }catch (NullPointerException ex){
+            System.out.println(ex);
+        }
         return retDTO;
     }
 }
