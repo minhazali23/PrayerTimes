@@ -7,10 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -23,11 +21,16 @@ public class PrayerTimeService {
     @Autowired
     AladhanApi aladhanApi;
 
-    public List<String> testPojo() throws IOException {
+    public PrayerTimeEntityDTO testPojo() throws IOException {
 
-        AladhanApi aladhanApi1 = new AladhanApi("NewYork", "UnitedStates");
-        return aladhanApi1.getTimings();
+        PrayerTimeEntityDTO prayerTimeEntityDTO = new PrayerTimeEntityDTO();
+        prayerTimeEntityDTO.setCityCountry("TokyoJapan");
+        prayerTimeEntityDTO.setDate("newdate");
+        prayerTimeEntityDTO.setTimezone("newTimezone");
+        prayerTimeEntityDTO.setPrayerTimes("newTime");
 
+        prayerTimeRepository.update(prayerTimeEntityDTO.getCityCountry(), prayerTimeEntityDTO);
+        return prayerTimeEntityDTO;
     }
 
     public PrayerTimeEntityDTO prayerTimesProcessor(String city, String country) throws IOException {
