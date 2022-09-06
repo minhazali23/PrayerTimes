@@ -1,8 +1,6 @@
 package com.prayerTimes.prayerTimes.RestController;
 
 import com.prayerTimes.prayerTimes.DTO.PrayerTimeEntityDTO;
-import com.prayerTimes.prayerTimes.Repository.PrayerTimeEntity;
-import com.prayerTimes.prayerTimes.Repository.PrayerTimeRepository;
 import com.prayerTimes.prayerTimes.Service.PrayerTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
