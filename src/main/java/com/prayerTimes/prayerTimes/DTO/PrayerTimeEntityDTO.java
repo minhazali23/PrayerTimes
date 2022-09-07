@@ -1,7 +1,5 @@
 package com.prayerTimes.prayerTimes.DTO;
 
-import java.util.List;
-
 public class PrayerTimeEntityDTO {
 
     private String cityCountry;

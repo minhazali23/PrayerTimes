@@ -13,13 +13,15 @@ public class PrayerTimesRestController{
 
     @Autowired
     PrayerTimeService prayerTimeService;
-
-    @GetMapping(value = "/testPojo")
-    public PrayerTimeEntityDTO testPojo() throws IOException {
-        return prayerTimeService.testPojo();
-    }
     @GetMapping("prayerTimeRequest/{country}/{city}")
     public PrayerTimeEntityDTO prayerTimeRequest(@PathVariable(value = "city") String city, @PathVariable(value = "country") String country) throws IOException {
         return prayerTimeService.prayerTimesProcessor(city, country);
     }
+
+
+//    @GetMapping(value = "/testPojo")
+//    public PrayerTimeEntityDTO testPojo() throws IOException {
+//        return prayerTimeService.testPojo();
+//    }
+
 }

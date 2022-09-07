@@ -21,18 +21,6 @@ public class PrayerTimeService {
     @Autowired
     AladhanApi aladhanApi;
 
-    public PrayerTimeEntityDTO testPojo() throws IOException {
-
-        PrayerTimeEntityDTO prayerTimeEntityDTO = new PrayerTimeEntityDTO();
-        prayerTimeEntityDTO.setCityCountry("TokyoJapan");
-        prayerTimeEntityDTO.setDate("newdate");
-        prayerTimeEntityDTO.setTimezone("newTimezone");
-        prayerTimeEntityDTO.setPrayerTimes("newTime");
-
-        prayerTimeRepository.update(prayerTimeEntityDTO.getCityCountry(), prayerTimeEntityDTO);
-        return prayerTimeEntityDTO;
-    }
-
     public PrayerTimeEntityDTO prayerTimesProcessor(String city, String country) throws IOException {
 
             String cityCountry = city.concat(country);
