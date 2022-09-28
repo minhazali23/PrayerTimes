@@ -2,10 +2,12 @@
 Prayer Times project is a web application which gives you information about prayer times depending on your location.
 
 ## Description
-Prayer Times is a SpringBoot project written in Java in order to create a RESTFUL service to the end user. Everytime a request is made to the backend server,
-the application will first check the database to see if prayertimes for the particular city exists. If it does, simply return the Object back to the client. In the event that this 
-data does not exist in the database, a call will be made to an external API and the data consumed from this external API will be reformatted and saved unto the database, before being 
-served back to the client.
+Prayer Times is a SpringBoot project written in Java in order to create a RESTFUL service to the end user. Everytime a request is made to the backend server (hosted in AWS EC2),
+the application will first check the DynamoDB database, to see if the prayer times for the requested city exists. If the prayer times for the requested city exists in the database, simply return the Object back to the client. 
+
+However, in the event that this data does not exist in the database, a call will be made to an external API. The data consumed from this external API will be reformatted and saved unto the database, before being served back to the client. 
+
+As the project grows, more thoughful methods will be implemented to ensure a robust, scalable and efficient system.
 
 ## Getting Started
 
