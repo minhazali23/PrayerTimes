@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class PrayerTimeService {
@@ -23,21 +24,23 @@ public class PrayerTimeService {
 
     public PrayerTimeEntityDTO prayerTimesProcessor(String city, String country) throws IOException {
 
-            String cityCountry = city.concat(country);
-            PrayerTimeEntityDTO prayerTimeEntityDTO;
-            prayerTimeEntityDTO = prayerTimeRepository.findOne(cityCountry);
+        String cityCountry = city.concat(country);
+        PrayerTimeEntityDTO prayerTimeEntityDTO;
+        Optional<PrayerTimeEntityDTO> getOptionalPrayerTimeDTO = prayerTimeRepository.findOne(cityCountry);
+        PrayerTimeEntityDTO getPrayerTimeEntityDTO = getOptionalPrayerTimeDTO.orElse(null);
 
-            if (Objects.isNull(prayerTimeEntityDTO.getCityCountry())) {
-                prayerTimeEntityDTO = callApiAndGetPrayerTimeDTO(city, country);
-                prayerTimeRepository.save(prayerTimeEntityDTO);
-            }
 
-            if (!isTheDateUpToDate(prayerTimeEntityDTO.getDate())) {
-                prayerTimeEntityDTO = callApiAndGetPrayerTimeDTO(city, country);
-                prayerTimeRepository.update(city, prayerTimeEntityDTO);
-            }
+        if (Objects.isNull(getPrayerTimeEntityDTO)) {
+            prayerTimeEntityDTO = callApiAndGetPrayerTimeDTO(city, country);
+            prayerTimeRepository.save(prayerTimeEntityDTO);
+        }
 
-            return prayerTimeEntityDTO;
+        else if (!isTheDateUpToDate(getPrayerTimeEntityDTO.getDate())) {
+            prayerTimeEntityDTO = callApiAndGetPrayerTimeDTO(city, country);
+            prayerTimeRepository.update(city, prayerTimeEntityDTO);
+        }
+
+        return getPrayerTimeEntityDTO;
     }
 
     private PrayerTimeEntityDTO callApiAndGetPrayerTimeDTO(String city, String country) throws IOException {
@@ -55,12 +58,12 @@ public class PrayerTimeService {
     }
 
 
-    private boolean isTheDateUpToDate(String thisDate){
+    private boolean isTheDateUpToDate(String thisDate) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.ENGLISH);
         LocalDate date = LocalDate.parse(thisDate, formatter);
 
-        if(LocalDate.now().getMonth().compareTo(date.getMonth()) != 0)
+        if (LocalDate.now().getMonth().compareTo(date.getMonth()) != 0)
             return false;
 
         return true;

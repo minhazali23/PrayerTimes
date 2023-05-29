@@ -15,6 +15,10 @@ public class PrayerTimesRestController{
     PrayerTimeService prayerTimeService;
     @GetMapping("prayerTimeRequest/{country}/{city}")
     public PrayerTimeEntityDTO prayerTimeRequest(@PathVariable(value = "city") String city, @PathVariable(value = "country") String country) throws IOException {
+        System.out.println(city.concat("/").concat(country));
+
+        System.out.println(prayerTimeService.prayerTimesProcessor(city, country));
+
         return prayerTimeService.prayerTimesProcessor(city, country);
     }
 

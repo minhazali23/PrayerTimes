@@ -31,7 +31,7 @@ public class DynamoDbConfig {
 
     private AmazonDynamoDB amazonDynamoDB(){
         return AmazonDynamoDBClientBuilder.standard()
-                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(amazonDynamoDBEndpoint,""))
+                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(amazonDynamoDBEndpoint,"local"))
                 .withCredentials(amazonDynamoDBCredentials()).build();
 
     }

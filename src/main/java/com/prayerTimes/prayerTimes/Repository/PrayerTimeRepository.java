@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class PrayerTimeRepository {
@@ -59,7 +60,7 @@ public class PrayerTimeRepository {
         return "PrayerTimeEntity deleted for " + id;
     }
 
-    public PrayerTimeEntityDTO findOne(String cityCountry) {
+    public Optional<PrayerTimeEntityDTO> findOne(String cityCountry) {
         PrayerTimeEntityDTO retDTO = new PrayerTimeEntityDTO();
 
         try {
@@ -70,11 +71,11 @@ public class PrayerTimeRepository {
             retDTO.setDate(entity.getDate());
             retDTO.setPrayerTimes(entity.getPrayerTimes());
 
-            return retDTO;
+            return Optional.of(retDTO);
 
         }catch (NullPointerException ex){
             System.out.println(ex);
         }
-        return retDTO;
+        return Optional.of(retDTO);
     }
 }
