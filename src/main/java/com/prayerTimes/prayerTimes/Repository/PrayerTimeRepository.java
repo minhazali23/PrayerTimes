@@ -60,7 +60,7 @@ public class PrayerTimeRepository {
         return "PrayerTimeEntity deleted for " + id;
     }
 
-    public Optional<PrayerTimeEntityDTO> findOne(String cityCountry) {
+    public PrayerTimeEntityDTO findOne(String cityCountry) {
         PrayerTimeEntityDTO retDTO = new PrayerTimeEntityDTO();
 
         try {
@@ -71,11 +71,11 @@ public class PrayerTimeRepository {
             retDTO.setDate(entity.getDate());
             retDTO.setPrayerTimes(entity.getPrayerTimes());
 
-            return Optional.of(retDTO);
+            return retDTO;
 
         }catch (NullPointerException ex){
             System.out.println(ex);
         }
-        return Optional.of(retDTO);
+        return retDTO;
     }
 }

@@ -1,6 +1,7 @@
 package com.prayerTimes.prayerTimes.Service;
 
 import com.prayerTimes.prayerTimes.DTO.PrayerTimeEntityDTO;
+import com.prayerTimes.prayerTimes.Exceptions.UnknownCityCountryCombinationException;
 import com.prayerTimes.prayerTimes.ExternalApi.AladhanApi;
 import com.prayerTimes.prayerTimes.Repository.PrayerTimeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,21 +27,20 @@ public class PrayerTimeService {
 
         String cityCountry = city.concat(country);
         PrayerTimeEntityDTO prayerTimeEntityDTO;
-        Optional<PrayerTimeEntityDTO> getOptionalPrayerTimeDTO = prayerTimeRepository.findOne(cityCountry);
-        PrayerTimeEntityDTO getPrayerTimeEntityDTO = getOptionalPrayerTimeDTO.orElse(null);
+        PrayerTimeEntityDTO getPrayerTimeDTO = prayerTimeRepository.findOne(cityCountry);
 
 
-        if (Objects.isNull(getPrayerTimeEntityDTO)) {
+        if (!doesThisCityCountryEntryExist(getPrayerTimeDTO)) {
             prayerTimeEntityDTO = callApiAndGetPrayerTimeDTO(city, country);
             prayerTimeRepository.save(prayerTimeEntityDTO);
         }
 
-        else if (!isTheDateUpToDate(getPrayerTimeEntityDTO.getDate())) {
+        else if (!isTheDateUpToDate(getPrayerTimeDTO.getDate())) {
             prayerTimeEntityDTO = callApiAndGetPrayerTimeDTO(city, country);
             prayerTimeRepository.update(city, prayerTimeEntityDTO);
         }
 
-        return getPrayerTimeEntityDTO;
+        return getPrayerTimeDTO;
     }
 
     private PrayerTimeEntityDTO callApiAndGetPrayerTimeDTO(String city, String country) throws IOException {
@@ -64,6 +64,13 @@ public class PrayerTimeService {
         LocalDate date = LocalDate.parse(thisDate, formatter);
 
         if (LocalDate.now().getMonth().compareTo(date.getMonth()) != 0)
+            return false;
+
+        return true;
+    }
+
+    private boolean doesThisCityCountryEntryExist(PrayerTimeEntityDTO prayerTimeEntityDTO){
+        if(prayerTimeEntityDTO.getDate() == null & prayerTimeEntityDTO.getPrayerTimes() == null && prayerTimeEntityDTO.getCityCountry() == null && prayerTimeEntityDTO.getPrayerTimes() == null)
             return false;
 
         return true;
