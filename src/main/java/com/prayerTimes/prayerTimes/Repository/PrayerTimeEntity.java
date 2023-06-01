@@ -4,20 +4,16 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
-@DynamoDBTable(tableName = "PrayerTimesByCity")
+@DynamoDBTable(tableName = "PrayerTimesByTimezone")
 public class PrayerTimeEntity {
 
-    private String cityCountry;
     private String timezone;
     private String date;
     private String prayerTimes;
 
     public PrayerTimeEntity(){}
 
-    @DynamoDBHashKey(attributeName = "CityCountry")
-    public String getCityCountry(){return cityCountry;}
-
-    @DynamoDBAttribute(attributeName = "timezone")
+    @DynamoDBHashKey(attributeName = "timezone")
     public String getTimezone() {
         return timezone;
     }
@@ -32,8 +28,6 @@ public class PrayerTimeEntity {
         return prayerTimes;
     }
 
-    public void setCityCountry(String cityCountry) {this.cityCountry = cityCountry;}
-
     public void setTimezone(String timezone) {
         this.timezone = timezone;
     }
@@ -46,7 +40,7 @@ public class PrayerTimeEntity {
     @Override
     public String toString(){
         return "PrayerTimeEntity{" +
-                "City=" + timezone +
+                "TimeZone=" + timezone +
                 "Date=" + date +
                 "PrayerTimes=" + prayerTimes +
                 "}";

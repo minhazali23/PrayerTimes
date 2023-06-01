@@ -2,21 +2,17 @@ package com.prayerTimes.prayerTimes.DTO;
 
 public class PrayerTimeEntityDTO {
 
-    private String cityCountry;
     private String timezone;
     private String date;
     private String prayerTimes;
 
     public PrayerTimeEntityDTO(){}
 
-    public PrayerTimeEntityDTO(String cityCountry, String city, String date, String prayerTimes){
-        this.cityCountry = cityCountry;
-        this.timezone = city;
+    public PrayerTimeEntityDTO(String timezone, String date, String prayerTimes){
+        this.timezone = timezone;
         this.date = date;
         this.prayerTimes = prayerTimes;
     }
-
-    public String getCityCountry() {return cityCountry;}
 
     public String getPrayerTimes() {
         return prayerTimes;
@@ -42,13 +38,10 @@ public class PrayerTimeEntityDTO {
         this.prayerTimes = prayerTimes;
     }
 
-    public void setCityCountry(String cityCountry) {this.cityCountry = cityCountry;}
-
     @Override
     public String toString(){
         return "PrayerTimeEntityDTO{" +
-                "CityCountry=" + cityCountry +
-                "City=" + timezone +
+                "TimeZone=" + timezone +
                 "Date=" + date +
                 "PrayerTimes=" + prayerTimes +
                 "}";

@@ -19,7 +19,6 @@ public class PrayerTimeRepository {
     public PrayerTimeEntity save(PrayerTimeEntityDTO prayerTime){
 
         PrayerTimeEntity insertPrayerTime = new PrayerTimeEntity();
-        insertPrayerTime.setCityCountry(prayerTime.getCityCountry());
         insertPrayerTime.setTimezone(prayerTime.getTimezone());
         insertPrayerTime.setDate(prayerTime.getDate());
         insertPrayerTime.setPrayerTimes(prayerTime.getPrayerTimes());
@@ -39,7 +38,6 @@ public class PrayerTimeRepository {
     public PrayerTimeEntity update(String cityCountry, PrayerTimeEntityDTO prayerTime){
 
         PrayerTimeEntity updateCityEntity = new PrayerTimeEntity();
-        updateCityEntity.setCityCountry(prayerTime.getCityCountry());
         updateCityEntity.setTimezone(prayerTime.getTimezone());
         updateCityEntity.setDate(prayerTime.getDate());
         updateCityEntity.setPrayerTimes(prayerTime.getPrayerTimes());
@@ -55,7 +53,7 @@ public class PrayerTimeRepository {
 
     public String delete(String id){
         PrayerTimeEntity deleteThis = new PrayerTimeEntity();
-        deleteThis.setCityCountry(id);
+        deleteThis.setTimezone(id);
         dynamoDBMapper.delete(deleteThis);
         return "PrayerTimeEntity deleted for " + id;
     }
@@ -66,7 +64,6 @@ public class PrayerTimeRepository {
         try {
             PrayerTimeEntity entity = dynamoDBMapper.load(PrayerTimeEntity.class, cityCountry);
 
-            retDTO.setCityCountry(entity.getCityCountry());
             retDTO.setTimezone(entity.getTimezone());
             retDTO.setDate(entity.getDate());
             retDTO.setPrayerTimes(entity.getPrayerTimes());

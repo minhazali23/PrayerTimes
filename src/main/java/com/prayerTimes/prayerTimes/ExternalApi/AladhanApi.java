@@ -14,8 +14,12 @@ import org.springframework.web.context.annotation.RequestScope;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 
@@ -37,10 +41,12 @@ public class AladhanApi {
         extractDataAndReformat(getJsonFromRequest);
     }
 
-    public String consumeExternalApiAndGetJson(String city, String country){
+    public String consumeExternalApiAndGetJson(String city, String country) throws UnsupportedEncodingException {
 
         String returnJson = null;
-        String uri = "https://api.aladhan.com/v1/calendarByCity?city=".concat(city).concat("&country=").concat(country).concat("&method=2");
+        String cityEncoded = URLEncoder.encode(city, "UTF-8");
+        String countryEncoded = URLEncoder.encode(country, "UTF-8");
+        String uri = "https://api.aladhan.com/v1/calendarByCity?city=".concat(cityEncoded).concat("&country=").concat(countryEncoded).concat("&method=2");
 
         try {
             DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -80,7 +86,14 @@ public class AladhanApi {
 
     }
     private String getTimeZoneFromJson(AladhanMainPojo retTimeZone){
-        return retTimeZone.getData().get(0).getMeta().getTimezone();
+
+        String extractTimeZone = retTimeZone.getData().get(0).getTimings().getFajr();
+        Pattern pattern = Pattern.compile("([a-zA-Z]+)");
+        Matcher matcher = pattern.matcher(extractTimeZone);
+        if(matcher.find()) {
+            return matcher.group(0);
+        }
+        return "no timezone found";
     }
 
     private String getDateFromJson(AladhanMainPojo retDate){
